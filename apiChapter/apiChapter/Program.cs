@@ -9,27 +9,27 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-// builder.Services
-//     .AddAuthentication(options =>
-//     {
-//         options.DefaultAuthenticateScheme = "JwtBearer";
-//         options.DefaultChallengeScheme = "JwtBearer";
-//     })
+ builder.Services
+     .AddAuthentication(options =>
+     {
+         options.DefaultAuthenticateScheme = "JwtBearer";
+         options.DefaultChallengeScheme = "JwtBearer";
+     })
 
-//     .AddJwtBearer("JwtBearer", options => 
-//     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuer = true,
-//             ValidateAudience = true,
-//             ValidateLifetime = true,
+     .AddJwtBearer("JwtBearer", options => 
+     {
+         options.TokenValidationParameters = new TokenValidationParameters
+         {
+             ValidateIssuer = true,
+             ValidateAudience = true,
+             ValidateLifetime = true,
             
-//             IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("chapter-chave-autenticacao")),
-//             ClockSkew = TimeSpan.FromMinutes(30),
-//             ValidIssuer = "chapter.webapi",
-//             ValidAudience = "chapter.webapi"      
-//         };
-//     });
+             IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("chapter-chave-autenticacao")),
+             ClockSkew = TimeSpan.FromMinutes(30),
+             ValidIssuer = "apiChapter",
+             ValidAudience = "apiChapter"      
+         };
+     });
 
 builder.Services.AddCors(options =>
 {
