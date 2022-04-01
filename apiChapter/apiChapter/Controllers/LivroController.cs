@@ -1,57 +1,100 @@
-using apiChapter.Models;
-using apiChapter.Repositories;
+﻿using ER3_UC11.Models;
+using ER3_UC11.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
-namespace apiChapter.Controllers;
-
-[Produces("application/json")]
-
-[ApiController]
-[Route("api/[controller]")]
-public class LivroController : ControllerBase
+namespace ER3_UC11.Controllers
 {
-     private readonly LivroRepository _repository;
-        public LivroController(LivroRepository repository)
-        {
-            _repository = repository;
-        }
+    [Produces("application/json")]
 
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LivroController : Controller
+    {
+        private readonly LivroRepository _livroRepository;
+        public LivroController(LivroRepository livroRepository)
+        {
+            _livroRepository = livroRepository;
+        }
+        
         [HttpGet]
-        public IActionResult ListarColecao()
+        public IActionResult Listar()
         {
-            return Ok(_repository.ListarLivros());
-        }
-
-        [HttpGet("{Id:int}")]
-        public IActionResult ListarLivro(int Id)
-        {
-            return Ok(_repository.ListarLivroPesquisado(Id));
-        }
-
-        [HttpPost]
-        public IActionResult CadastrarLivro(Livro livro)
-        {
-            _repository.CadastarLivro(livro);
-            return StatusCode(201);
-        }
-
-        [HttpPut("{Id:int}")]
-        public IActionResult AtualizarLivro(int Id, Livro livro)
-        {
-            if (livro != null)
+            try
             {
-                _repository.AtualizarLivro(Id, livro);
+                return Ok(_livroRepository.Listar());
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult BuscarPorId(int id)
+        {
+            try
+            {
+                Livro livroProcurado = _livroRepository.BuscarPorId(id);
+                if (livroProcurado == null)
+                {
+                    return NotFound();
+                }
+                return Ok(livroProcurado);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        
+        [HttpPost]
+        public IActionResult Cadastrar(Livro livro)
+        {
+            try
+            {
+                _livroRepository.Cadastrar(livro);
+
+                return StatusCode(201);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Atualizar(int id, Livro livro)
+        {
+
+            try
+            {
+                _livroRepository.Atualizar(id, livro);
                 return StatusCode(204);
             }
-            return StatusCode(400);
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
-        [HttpDelete("{Id:int}")]
-        public IActionResult DeletarLivro(int Id)
+        [HttpDelete("{id}")]
+        public IActionResult Deletar(int id)
         {
-            _repository.Deletar(Id);
-            return StatusCode(204);
-        }
 
-        
+            try
+            {
+                _livroRepository.Deletar(id);
+                return StatusCode(204);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+    }
 }

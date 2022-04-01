@@ -1,20 +1,21 @@
-using apiChapter.Models;
-using apiChapter.Repositories;
+﻿using ER3_UC11.Models;
+using ER3_UC11.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
-namespace apiChapter.Controllers
+namespace ER3_UC11.Controllers
 {
     [Produces("application/json")]
 
     [Route("api/[controller]")]
     [ApiController]
-    public class UsuarioController : ControllerBase
+    public class UsuarioController : Controller
     {
-        private readonly UsuarioRepository _repository;
+        private readonly UsuarioRepository _usuarioRepository;
 
-        public UsuarioController(UsuarioRepository repository)
+        public UsuarioController(UsuarioRepository usuarioRepository)
         {
-            _repository = repository;
+            _usuarioRepository = usuarioRepository;
         }
 
         [HttpGet]
@@ -22,20 +23,22 @@ namespace apiChapter.Controllers
         {
             try
             {
-                return Ok(_repository.Listar());
+                return Ok(_usuarioRepository.Listar());
             }
+            
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id}")]
         public IActionResult BuscarPorId(int id)
         {
             try
             {
-                Usuario usuarioProcurado = _repository.BuscarPorId(id);
+                Usuario usuarioProcurado = _usuarioRepository.BuscarPorId(id);
 
                 if (usuarioProcurado == null)
                 {
@@ -56,7 +59,7 @@ namespace apiChapter.Controllers
         {
             try
             {
-                _repository.CadastrarUsuario(usuario);
+                _usuarioRepository.Cadastrar(usuario);
 
                 return StatusCode(201);
             }
@@ -66,12 +69,12 @@ namespace apiChapter.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public IActionResult Atualizar(int id, Usuario u)
+        [HttpPut("{id}")]
+        public IActionResult Atualizar(int id, Usuario usuario)
         {
             try
             {
-                _repository.Atualizar(id, u);
+                _usuarioRepository.Atualizar(id, usuario);
 
                 return StatusCode(204);
             }
@@ -81,12 +84,12 @@ namespace apiChapter.Controllers
             }
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id}")]
         public IActionResult Deletar(int id)
         {
             try
             {
-                _repository.Deletar(id);
+                _usuarioRepository.Deletar(id);
 
                 return StatusCode(204);
             }
